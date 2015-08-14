@@ -1,5 +1,6 @@
 package ps.com.BasicOpenGLTextureView;
 
+import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
@@ -19,6 +20,7 @@ public class RenderThread extends Thread {
     private static final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
     private static final String TAG = "RenderThread";
     private SurfaceTexture mSurface;
+    private Context mContext;
     private EGLDisplay mEglDisplay;
     private EGLSurface mEglSurface;
     private EGLContext mEglContext;
@@ -29,8 +31,9 @@ public class RenderThread extends Thread {
     private FloatBuffer mVertices;
     private float[] mVerticesData;
 
-    public RenderThread(SurfaceTexture surface) {
+    public RenderThread(SurfaceTexture surface, Context context) {
         mSurface = surface;
+        mContext = context;
     }
 
     public void setVertices(FloatBuffer mV, float[] mVD) {
@@ -182,24 +185,11 @@ public class RenderThread extends Thread {
     }
 
     private void initGL() {
-        final String vertexShaderSource =
-                "attribute vec4 position;\n" +
-                        "attribute vec4 color;\n" +
-                        "varying vec4 v_Color;\n"
-                        +
-                        "void main () {\n" +
-                        "   gl_Position = position;\n" +
-                        "   v_Color = color;\n" +
-                        "}";
+        final String vertexShaderSource = TextResourceReader.readTextFileFromResource(mContext, R.raw.vertex_shader);
 
-        final String fragmentShaderSource =
-                "precision mediump float;\n" +
-                        "varying vec4 v_Color;\n"
-                        +
-                        "void main () {\n" +
-                        "   gl_FragColor = v_Color;\n" +
-                        //"   gl_FragColor = vec4(1.0, 0.0, 0.0, 0.0);\n" +
-                        "}";
+
+        final String fragmentShaderSource = TextResourceReader.readTextFileFromResource(mContext, R.raw.fragment_shader);
+
 
         mEgl = (EGL10) EGLContext.getEGL();
 

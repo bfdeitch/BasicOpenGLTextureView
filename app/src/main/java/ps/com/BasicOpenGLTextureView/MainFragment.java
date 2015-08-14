@@ -39,7 +39,7 @@ public class MainFragment extends Fragment {
         mVerticesData[ct++] = 0.0f;
         mVerticesData[ct++] = 1.0f;
         mVerticesData[ct++] = 0.0f;
-        mVerticesData[ct++] = 1.0f;
+        mVerticesData[ct++] = 0.0f;
         mVerticesData[ct++] = 1.0f;
         mVerticesData[ct++] = 1.0f;
         mVerticesData[ct++] = 1.0f;
@@ -80,7 +80,7 @@ public class MainFragment extends Fragment {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface,
                                               int width, int height) {
-            renderThread = new RenderThread(surface);
+            renderThread = new RenderThread(surface, getActivity().getApplicationContext());
             renderSurface = surface;
             changeVertexData();
         }
